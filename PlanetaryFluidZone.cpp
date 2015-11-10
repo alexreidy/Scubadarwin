@@ -12,7 +12,7 @@ PlanetaryFluidZone::~PlanetaryFluidZone() {}
 
 PlanetaryFluidZone::PlanetaryFluidZone()
 {
-    setGravityAcceleration(Vector2f(0, 9.8));
+    setGravityAcceleration(Vector2f(0, 49));
 }
 
 void PlanetaryFluidZone::setDensity(float density)

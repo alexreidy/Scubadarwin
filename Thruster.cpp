@@ -13,10 +13,10 @@ Thruster::Thruster(Organism* organism) : Organ(organism)
     for (int i = 0; i < 1; i++) {
         auto shape = new CircleShape(sdu::rin(30)+5);
         shape->setPosition(sdu::rin(30), sdu::rin(30));
-        shape->setFillColor(Color(230, 220, 100));
+        shape->setFillColor(Color(230, 180, 180));
         addShape(shape);
     }
-    setDensity(1.2);
+    setDensity(1.4);
 }
 
 Thruster::~Thruster() {}

@@ -13,5 +13,5 @@ Atmosphere::~Atmosphere() {}
 Atmosphere::Atmosphere(std::vector<Shape*> shapes)
 {
     setShapes(shapes);
-    setDensity(0.01);
+    setDensity(0.001);
 }
