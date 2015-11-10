@@ -16,7 +16,7 @@ Thruster::Thruster(Organism* organism) : Organ(organism)
         shape->setFillColor(Color(230, 180, 180));
         addShape(shape);
     }
-    setDensity(1.4);
+    setDensity(1.1);
 }
 
 Thruster::~Thruster() {}

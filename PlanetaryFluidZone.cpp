@@ -27,7 +27,7 @@ float PlanetaryFluidZone::getDensity() const
 
 inline float drag(float fluidDensity, float objVelocity, float objArea)
 {
-    const auto drag = 0.5 * fluidDensity * pow(objVelocity, 2) * objArea * 0.0005;
+    const auto drag = 0.5 * fluidDensity * pow(objVelocity, 2) * objArea * 0.0009;
     if (objVelocity > 0) return -drag;
     return drag;
 }

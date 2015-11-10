@@ -36,7 +36,7 @@ void init()
     atmosphere->Entity::setPosition(Vector2f(0,0));
     atmosphere->setColor(Color::Cyan);
 
-    for (int i = 0; i < 25; i++) {
+    for (int i = 0; i < 33; i++) {
         
         auto e = new Organism;
         //e->addPhysicsEntity(new Bone(nullptr));
@@ -72,16 +72,19 @@ void update()
         ocean->affectAnyContainedEntitiesIn(entities);
         atmosphere->affectAnyContainedEntitiesIn(entities); // todo: make something that does this in O(N) instead of O(2N)..
         
+        entity->applyForce((mpos - entity->getPosition())*5000.0f);
+        
         if (entity->getPosition().y > HEIGHT * 2) entity->move(Vector2f(0, -HEIGHT*2));
         
         auto v = sdu::magnitude(entity->getVelocity());
         
+        /*
         for (auto other : entities) {
             if (other == entity) continue;
             if (entity->touching(*other)) {
                 entity->setColor(sf::Color::Yellow);
             }
-        }
+        }*/
         
         //ocean->setPosition(mpos);
         
