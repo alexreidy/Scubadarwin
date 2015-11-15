@@ -10,9 +10,8 @@
 
 Atmosphere::~Atmosphere() {}
 
-Atmosphere::Atmosphere(std::vector<Shape*>* shapes)
+Atmosphere::Atmosphere()
 {
-    setShapes(shapes);
     setDensity(0.2);
 }
 

@@ -11,7 +11,6 @@
 Organ::Organ(Organism* organism)
 {
     this->organism = organism;
-    setShapes(new std::vector<Shape*>);
 }
 
 Organ::~Organ() {}

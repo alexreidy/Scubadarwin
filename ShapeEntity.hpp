@@ -22,9 +22,7 @@ public:
     
     // Positions of added shapes are offsets relative to getPosition().
     virtual void addShape(Shape* shape);
-    
-    void setShapes(std::vector<Shape*>* shapes);
-    
+        
     // Not strictly encapsulated in favor of performance
     virtual const std::vector<Shape*>& getShapes() const;
     
@@ -38,12 +36,10 @@ public:
     
     void setColor(const Color& color);
     
-    bool hasShapeList() const;
-    
     virtual ShapeEntity* clone() const = 0;
     
 protected:
-    mutable std::vector<Shape*>* shapes = nullptr;
+    mutable std::vector<Shape*> shapes;
     
 };
 

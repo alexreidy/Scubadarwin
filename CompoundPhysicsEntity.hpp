@@ -12,7 +12,7 @@
 #include "PhysicsEntity.hpp"
 
 class CompoundPhysicsEntity : public PhysicsEntity {
-public:
+public:    
     virtual ~CompoundPhysicsEntity();
         
     virtual float getDensity() const override;
@@ -40,7 +40,11 @@ public:
     virtual void addShape(Shape* shape) override;
     
 private:
-    std::vector<PhysicsEntity*>* constituents = new std::vector<PhysicsEntity*>;
+    std::vector<PhysicsEntity*> constituents;
+    
+    bool shapesCached = false;
+    
+    mutable float mass = -1;
     
     int shapeCount = 0;
     

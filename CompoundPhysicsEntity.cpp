@@ -13,17 +13,18 @@ CompoundPhysicsEntity::~CompoundPhysicsEntity()
     for (auto entity : getPhysicsEntities()) {
         delete entity;
     }
-    
-    delete constituents;
 }
 
-float CompoundPhysicsEntity::getMass() const // todo: cache this!!!!!
+float CompoundPhysicsEntity::getMass() const
 {
+    if (mass >= 0) return mass;
+    
     float m = 0;
     for (auto entity : getPhysicsEntities()) {
         m += entity->getMass();
     }
-    return m;
+    
+    return mass = m;
 }
 
 float CompoundPhysicsEntity::getDensity() const
@@ -58,43 +59,43 @@ void CompoundPhysicsEntity::move(const Vector2f& offset)
 
 const std::vector<Shape*>& CompoundPhysicsEntity::getShapes() const
 {
-    if (hasShapeList()) return ShapeEntity::getShapes();
+    if (shapesCached) return shapes;
     
-    auto shapes = new std::vector<Shape*>(getShapeCount());
+    shapes = std::vector<Shape*>(getShapeCount());
     
     int i = 0;
     for (auto entity : getPhysicsEntities()) {
         for (auto shape : entity->getShapes()) {
-            (*shapes)[i] = shape;
+            shapes[i] = shape;
             i++;
         }
     }
     
     this->shapes = shapes;
-    return *shapes;
+    return shapes;
 }
 
 void CompoundPhysicsEntity::addPhysicsEntity(PhysicsEntity* entity)
 {
-    constituents->push_back(entity);
+    constituents.push_back(entity);
     shapeCount += entity->getShapeCount();
-    setShapes(nullptr);
+    shapesCached = false;
 }
 
 void CompoundPhysicsEntity::removePhysicsEntity(PhysicsEntity* entity)
 {
-    for (int i = 0; i < constituents->size(); i++) {
-        if (constituents->at(i) == entity) {
-            constituents->erase(constituents->begin() + i);
+    for (int i = 0; i < constituents.size(); i++) {
+        if (constituents.at(i) == entity) {
+            constituents.erase(constituents.begin() + i);
         }
     }
     shapeCount -= entity->getShapeCount();
-    setShapes(nullptr);
+    shapesCached = false;
 }
 
 const std::vector<PhysicsEntity*>& CompoundPhysicsEntity::getPhysicsEntities() const
 {
-    return *constituents;
+    return constituents;
 }
 
 int CompoundPhysicsEntity::getShapeCount() const

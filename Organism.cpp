@@ -37,7 +37,7 @@ Organ* makeRandomOrganForOrganism(Organism* organism)
 
 Organism::Organism()
 {
-
+    
 }
 
 Organism* Organism::randomlyGenerateOrganism(int organCount)

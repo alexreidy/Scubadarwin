@@ -13,7 +13,7 @@
 
 class Ocean : public PlanetaryFluidZone {
 public:
-    Ocean(std::vector<Shape*>* shapes = nullptr);
+    Ocean();
     
     virtual ~Ocean();
     

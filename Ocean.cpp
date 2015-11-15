@@ -10,9 +10,8 @@
 
 Ocean::~Ocean() {}
 
-Ocean::Ocean(std::vector<Shape*>* shapes)
+Ocean::Ocean()
 {
-    setShapes(shapes);
     setDensity(3);
 }
 

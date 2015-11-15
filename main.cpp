@@ -4,6 +4,7 @@
 #include "Ocean.hpp"
 #include "Atmosphere.hpp"
 #include "Organism.hpp"
+#include "Bone.hpp"
 
 using sf::Clock;
 using sf::Mouse;
@@ -14,7 +15,7 @@ sf::RenderWindow window(sf::VideoMode(), "Scubadarwin", sf::Style::Fullscreen);
 const float WIDTH = window.getSize().x, HEIGHT = window.getSize().y;
 const auto SCREEN_CENTER = Vector2f(WIDTH/2, HEIGHT/2);
 
-std::vector<PhysicsEntity*> entities;
+std::set<PhysicsEntity*> entities;
 
 Ocean* ocean;
 Atmosphere* atmosphere;
@@ -24,25 +25,23 @@ void init()
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
     
-    auto oceanShapes = new std::vector<Shape*>;
-    oceanShapes->push_back(new RectangleShape(Vector2f(WIDTH*20, HEIGHT*20)));
-    ocean = new Ocean(oceanShapes);
+    ocean = new Ocean;
+    ocean->addShape(new RectangleShape(Vector2f(WIDTH*20, HEIGHT*20)));
     ocean->setPosition(Vector2f(0, HEIGHT/2));
     ocean->setColor(Color::Blue);
     
-    auto atmosphereShapes = new std::vector<Shape*>;
-    atmosphereShapes->push_back(new RectangleShape(Vector2f(WIDTH*20, HEIGHT/2)));
-    atmosphere = new Atmosphere(atmosphereShapes);
+    atmosphere = new Atmosphere;
+    atmosphere->addShape(new RectangleShape(Vector2f(WIDTH*20, HEIGHT/2)));
     atmosphere->Entity::setPosition(Vector2f(0,0));
     atmosphere->setColor(Color::Cyan);
     
     auto organism = Organism::randomlyGenerateOrganism(4);
-    entities.push_back(organism);
+    entities.insert(organism);
 
     for (int i = 0; i < 100; i++) {
         auto kid = organism->reproduce();
         kid->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
-        entities.push_back(kid);
+        entities.insert(kid);
     }
     
 }

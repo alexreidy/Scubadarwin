@@ -10,35 +10,25 @@
 
 ShapeEntity::~ShapeEntity()
 {
-    for (auto shape : getShapes()) delete shape;
-    delete shapes;
+    for (auto shape : getShapes()) {
+        delete shape;
+    }
 }
 
 const std::vector<Shape*>& ShapeEntity::getShapes() const
 {
-    return *shapes;
+    return shapes;
 }
 
 void ShapeEntity::addShape(Shape* shape)
 {
     shape->move(getPosition());
-    shapes->push_back(shape);
-}
-
-void ShapeEntity::setShapes(std::vector<Shape*>* shapes)
-{
-    if (hasShapeList()) {
-        for (auto shape : getShapes()) {
-            delete shape;
-        }
-        delete shapes;
-    }
-    this->shapes = shapes;
+    shapes.push_back(shape);
 }
 
 int ShapeEntity::getShapeCount() const
 {
-    return shapes->size();
+    return shapes.size();
 }
 
 bool ShapeEntity::touching(const ShapeEntity* entity) const
@@ -75,9 +65,4 @@ void ShapeEntity::setColor(const Color &color)
     for (auto shape : getShapes()) {
         shape->setFillColor(color);
     }
-}
-
-bool ShapeEntity::hasShapeList() const
-{
-    return shapes != nullptr;
 }
