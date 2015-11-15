@@ -10,8 +10,13 @@
 
 Atmosphere::~Atmosphere() {}
 
-Atmosphere::Atmosphere(std::vector<Shape*> shapes)
+Atmosphere::Atmosphere(std::vector<Shape*>* shapes)
 {
     setShapes(shapes);
-    setDensity(0.001);
+    setDensity(0.2);
+}
+
+ShapeEntity* Atmosphere::clone() const
+{
+    return new Atmosphere;
 }

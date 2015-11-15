@@ -7,7 +7,7 @@
 //
 
 #ifndef PhysicsEntity_hpp
-#define PhysicsEntity_hpp ////// ************* todo: build a method caching system?
+#define PhysicsEntity_hpp
 
 #include "ShapeEntity.hpp"
 

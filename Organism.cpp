@@ -12,15 +12,15 @@
 #include "Thruster.hpp"
 const int N_ORGAN_TYPES = 2;
 
+// Consider using OrganGenerator(Factory) classes, particularly if they're faster
+
 typedef std::function<Organ*(Organism*)> OrganGeneratorFunction;
 
 template <class OrganType>
 OrganGeneratorFunction getOrganGenerator()
 {
     return [](Organism* organism) -> Organ* {
-        // where should we generate random organs and mutated organs? In constructors?
-        
-        return new OrganType(organism);
+        return new OrganType(organism, true);
     };
 }
 
@@ -37,10 +37,19 @@ Organ* makeRandomOrganForOrganism(Organism* organism)
 
 Organism::Organism()
 {
-    for (int i = 0; i < 5; i++) {
-        Organ* organ = makeRandomOrganForOrganism(this);
-        addPhysicsEntity(organ);
+
+}
+
+Organism* Organism::randomlyGenerateOrganism(int organCount)
+{
+    auto organism = new Organism;
+    
+    for (int i = 0; i < organCount; i++) {
+        Organ* organ = makeRandomOrganForOrganism(organism);
+        organism->addPhysicsEntity(organ);
     }
+    
+    return organism;
 }
 
 Organism::~Organism()
@@ -61,15 +70,28 @@ void Organism::die()
 Organism* Organism::reproduce()
 {
     // TODO add chance of mutation arg?
-    return nullptr;
+    auto child = (Organism*) clone();
+    //mutate
+    return child;
 }
 
-void Organism::update(float tpf)
+void Organism::update(float dt)
 {
-    CompoundPhysicsEntity::update(tpf);
+    CompoundPhysicsEntity::update(dt);
 }
 
 void Organism::changeNutrients(float delta)
 {
     nutrients += delta;
+}
+
+ShapeEntity* Organism::clone() const
+{
+    auto clone = new Organism;
+    
+    for (auto entity : getPhysicsEntities()) {
+        clone->addPhysicsEntity((PhysicsEntity*) entity->clone());
+    }
+    
+    return clone;
 }

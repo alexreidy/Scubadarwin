@@ -10,8 +10,13 @@
 
 Ocean::~Ocean() {}
 
-Ocean::Ocean(std::vector<Shape*> shapes)
+Ocean::Ocean(std::vector<Shape*>* shapes)
 {
     setShapes(shapes);
-    setDensity(1);
+    setDensity(3);
+}
+
+ShapeEntity* Ocean::clone() const
+{
+    return new Ocean;
 }

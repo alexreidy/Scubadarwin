@@ -17,19 +17,26 @@ class Organ;
 class Organism : public CompoundPhysicsEntity {
 public:
     Organism();
+    
     virtual ~Organism();
     
+    static Organism* randomlyGenerateOrganism(int organCount = 1);
+    
     bool isAlive() const;
+    
     void die();
     
     Organism* reproduce();
     
-    void update(float tpf) override;
+    void update(float dt) override;
     
     void changeNutrients(float delta);
     
+    virtual ShapeEntity* clone() const override;
+    
 private:
     float hp = 0;
+    
     float nutrients = 0;
     
 };

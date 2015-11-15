@@ -21,7 +21,7 @@ public:
     
     virtual float getMass() const override;
     
-    virtual bool touching(const ShapeEntity& entity) const override;
+    virtual bool touching(const ShapeEntity* entity) const override;
     
     virtual void setPosition(const Vector2f& position) override;
     
@@ -31,14 +31,16 @@ public:
     
     void removePhysicsEntity(PhysicsEntity* entity);
     
-    virtual std::vector<Shape*> getShapes() const override; // should we really return a copy of this vec?
+    const std::vector<PhysicsEntity*>& getPhysicsEntities() const;
+    
+    virtual const std::vector<Shape*>& getShapes() const override;
     
     virtual int getShapeCount() const override;
     
     virtual void addShape(Shape* shape) override;
     
 private:
-    std::vector<PhysicsEntity*> constituents;
+    std::vector<PhysicsEntity*>* constituents = new std::vector<PhysicsEntity*>;
     
     int shapeCount = 0;
     

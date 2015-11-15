@@ -11,12 +11,3 @@
 Zone::~Zone() {}
 
 void Zone::update(float dt) {}
-
-void Zone::affectAnyContainedEntitiesIn(const std::vector<PhysicsEntity*>& entities)
-{
-    for (auto entity : entities) {
-        if (entity->touching(*this)) {
-            affect(entity);
-        }
-    }
-}

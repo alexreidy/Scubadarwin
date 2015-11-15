@@ -13,9 +13,11 @@
 
 class Ocean : public PlanetaryFluidZone {
 public:
-    Ocean(std::vector<Shape*> shapes);
+    Ocean(std::vector<Shape*>* shapes = nullptr);
     
     virtual ~Ocean();
+    
+    virtual ShapeEntity* clone() const override;
     
 };
 

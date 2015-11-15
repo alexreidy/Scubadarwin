@@ -24,7 +24,7 @@ public:
     float getDensity() const;
     
 protected:    
-    virtual Vector2f calcDragActingOn(PhysicsEntity* entity) const;
+    virtual Vector2f calcDragActingOn(const PhysicsEntity* entity) const;
     
 private:
     float density = 1;

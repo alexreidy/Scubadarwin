@@ -13,9 +13,12 @@
 
 class Atmosphere : public PlanetaryFluidZone {
 public:
-    Atmosphere(std::vector<Shape*> shapes);
+    Atmosphere(std::vector<Shape*>* shapes = nullptr);
     
     virtual ~Atmosphere();
+    
+    virtual ShapeEntity* clone() const override;
+
     
 };
 

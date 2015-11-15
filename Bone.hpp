@@ -17,11 +17,13 @@
 
 class Bone : public Organ {
 public:
-    Bone(Organism* organism);
+    Bone(Organism* organism = nullptr, bool randomlyGenerated = false);
     
     virtual ~Bone();
     
     virtual void update(float dt) override;
+    
+    virtual ShapeEntity* clone() const override;
 };
 
 #endif /* Bone_hpp */

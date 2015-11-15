@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include "util.hpp"
 
-#include "Bone.hpp"
 #include "Ocean.hpp"
 #include "Atmosphere.hpp"
+#include "Organism.hpp"
 
 using sf::Clock;
 using sf::Mouse;
@@ -24,35 +24,38 @@ void init()
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
     
-    std::vector<Shape*> oceanShape;
-    oceanShape.push_back(new RectangleShape(Vector2f(WIDTH, HEIGHT)));
-    ocean = new Ocean(oceanShape);
+    auto oceanShapes = new std::vector<Shape*>;
+    oceanShapes->push_back(new RectangleShape(Vector2f(WIDTH*20, HEIGHT*20)));
+    ocean = new Ocean(oceanShapes);
     ocean->setPosition(Vector2f(0, HEIGHT/2));
     ocean->setColor(Color::Blue);
     
-    std::vector<Shape*> atmosphereShapes;
-    atmosphereShapes.push_back(new RectangleShape(Vector2f(WIDTH, HEIGHT/2)));
+    auto atmosphereShapes = new std::vector<Shape*>;
+    atmosphereShapes->push_back(new RectangleShape(Vector2f(WIDTH*20, HEIGHT/2)));
     atmosphere = new Atmosphere(atmosphereShapes);
     atmosphere->Entity::setPosition(Vector2f(0,0));
     atmosphere->setColor(Color::Cyan);
+    
+    auto organism = Organism::randomlyGenerateOrganism(4);
+    entities.push_back(organism);
 
-    for (int i = 0; i < 33; i++) {
-        
-        auto e = new Organism;
-        //e->addPhysicsEntity(new Bone(nullptr));
-        e->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
-        entities.push_back(e);
-        
-        /*
-        auto b = new Bone(nullptr);
-        b->setPosition(sf::Vector2f(sdu::rin(2000), sdu::rin(2000)));
-        entities.push_back(b);*/
+    for (int i = 0; i < 100; i++) {
+        auto kid = organism->reproduce();
+        kid->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
+        entities.push_back(kid);
     }
+    
 }
 
 Clock deltaTimeClock;
 
-void draw(const ShapeEntity* shapeEntity);
+//void draw(const ShapeEntity* shapeEntity);
+
+void affectEntityWhenZonesTouch(PhysicsEntity* entity)
+{
+    if (entity->touching(atmosphere)) atmosphere->affect(entity);
+    if (entity->touching(ocean)) ocean->affect(entity);
+}
 
 void update()
 {
@@ -69,22 +72,22 @@ void update()
         //auto norm = sdu::norm(mpos - entity->getPosition());
         //entity->applyForce(norm * 50000.0f);
         
-        ocean->affectAnyContainedEntitiesIn(entities);
-        atmosphere->affectAnyContainedEntitiesIn(entities); // todo: make something that does this in O(N) instead of O(2N)..
+        affectEntityWhenZonesTouch(entity);
         
-        entity->applyForce((mpos - entity->getPosition())*5000.0f);
+        if (Mouse::isButtonPressed(Mouse::Button::Right))
+            entity->applyForce((mpos - entity->getPosition())*5000.0f);
         
         if (entity->getPosition().y > HEIGHT * 2) entity->move(Vector2f(0, -HEIGHT*2));
         
-        auto v = sdu::magnitude(entity->getVelocity());
+        //auto v = sdu::magnitude(entity->getVelocity());
         
-        /*
+        
         for (auto other : entities) {
             if (other == entity) continue;
-            if (entity->touching(*other)) {
+            if (entity->touching(other)) {
                 entity->setColor(sf::Color::Yellow);
             }
-        }*/
+        }
         
         //ocean->setPosition(mpos);
         

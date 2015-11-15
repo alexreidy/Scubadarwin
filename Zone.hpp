@@ -16,9 +16,7 @@ public:
     virtual ~Zone();
     
     virtual void affect(PhysicsEntity* entity) = 0;
-    
-    virtual void affectAnyContainedEntitiesIn(const std::vector<PhysicsEntity*>& entities);
-    
+        
     virtual void update(float dt) override;
     
 };

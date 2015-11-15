@@ -10,7 +10,7 @@
 
 namespace sdu {
 
-    std::default_random_engine generator;
+    std::default_random_engine generator(time(NULL));
     std::uniform_real_distribution<float> distribution(0, 1);
 
     float rin(float range)

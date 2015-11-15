@@ -10,15 +10,17 @@
 
 CompoundPhysicsEntity::~CompoundPhysicsEntity()
 {
-    for (auto entity : constituents) {
+    for (auto entity : getPhysicsEntities()) {
         delete entity;
     }
+    
+    delete constituents;
 }
 
 float CompoundPhysicsEntity::getMass() const // todo: cache this!!!!!
 {
     float m = 0;
-    for (auto entity : constituents) {
+    for (auto entity : getPhysicsEntities()) {
         m += entity->getMass();
     }
     return m;
@@ -31,17 +33,17 @@ float CompoundPhysicsEntity::getDensity() const
 
 void CompoundPhysicsEntity::setDensity(float density) {}
 
-bool CompoundPhysicsEntity::touching(const ShapeEntity& entity) const
+bool CompoundPhysicsEntity::touching(const ShapeEntity* entity) const
 {
-    for (auto c : constituents) if (c->touching(entity)) return true;
+    for (auto c : getPhysicsEntities()) if (c->touching(entity)) return true;
     return false;
 }
 
-void CompoundPhysicsEntity::setPosition(const Vector2f &position)
+void CompoundPhysicsEntity::setPosition(const Vector2f& position)
 {
     Vector2f offset = position - getPosition();
     Entity::setPosition(position);
-    for (auto entity : constituents) {
+    for (auto entity : getPhysicsEntities()) {
         entity->move(offset);
     }
 }
@@ -49,43 +51,50 @@ void CompoundPhysicsEntity::setPosition(const Vector2f &position)
 void CompoundPhysicsEntity::move(const Vector2f& offset)
 {
     Entity::move(offset);
-    for (auto entity : constituents) {
+    for (auto entity : getPhysicsEntities()) {
         entity->move(offset);
     }
 }
 
-std::vector<Shape*> CompoundPhysicsEntity::getShapes() const
+const std::vector<Shape*>& CompoundPhysicsEntity::getShapes() const
 {
-    std::vector<Shape*> shapes(getShapeCount());
-    // todo: consider adapting the current shapes instance var.
-    // This method is called EVERY update--far more frequently than
-    // the occasional expensive shape removal.
-    // There's definitely something more efficient out there: maybe a set?
+    if (hasShapeList()) return ShapeEntity::getShapes();
+    
+    auto shapes = new std::vector<Shape*>(getShapeCount());
     
     int i = 0;
-    for (auto entity : constituents) {
+    for (auto entity : getPhysicsEntities()) {
         for (auto shape : entity->getShapes()) {
-            shapes[i] = shape;
+            (*shapes)[i] = shape;
             i++;
         }
     }
-    return shapes;
+    
+    this->shapes = shapes;
+    return *shapes;
 }
 
 void CompoundPhysicsEntity::addPhysicsEntity(PhysicsEntity* entity)
 {
-    constituents.push_back(entity);
+    constituents->push_back(entity);
     shapeCount += entity->getShapeCount();
+    setShapes(nullptr);
 }
 
 void CompoundPhysicsEntity::removePhysicsEntity(PhysicsEntity* entity)
 {
-    for (int i = 0; i < constituents.size(); i++) {
-        if (constituents.at(i) == entity) {
-            constituents.erase(constituents.begin() + i);
+    for (int i = 0; i < constituents->size(); i++) {
+        if (constituents->at(i) == entity) {
+            constituents->erase(constituents->begin() + i);
         }
     }
     shapeCount -= entity->getShapeCount();
+    setShapes(nullptr);
+}
+
+const std::vector<PhysicsEntity*>& CompoundPhysicsEntity::getPhysicsEntities() const
+{
+    return *constituents;
 }
 
 int CompoundPhysicsEntity::getShapeCount() const

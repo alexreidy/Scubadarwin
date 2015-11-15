@@ -17,12 +17,12 @@
 #include <set>
 
 namespace sdu {
-    
-    using namespace sf;
+
+    using sf::Vector2f;
     
     // Returns a random float on [0, range]
     float rin(float range);
-
+    
     // Returns x with a random sign (+/-)
     float rsign(float x);
     

@@ -18,7 +18,7 @@ class Organism;
 
 class Organ : public PhysicsEntity, ImpulseReceiver {
 public:
-    Organ(Organism* organism);
+    Organ(Organism* organism = nullptr);
     virtual ~Organ();
     
     virtual void update(float tpf) = 0;

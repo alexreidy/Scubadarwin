@@ -16,11 +16,13 @@ using sf::CircleShape;
 
 class Thruster : public Organ {
 public:
-    Thruster(Organism* organism);
+    Thruster(Organism* organism = nullptr, bool randomlyGenerated = false);
     
     virtual ~Thruster();
     
     virtual void update(float dt) override;
+    
+    virtual ShapeEntity* clone() const override;
     
 };
 
