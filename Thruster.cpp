@@ -15,10 +15,16 @@ Thruster::Thruster(Organism* organism, bool randomlyGenerated) : Organ(organism)
         return;
     for (int i = 0; i < 1; i++) {
         auto shape = new CircleShape(sdu::rin(20)+2);
-        //auto shape = new sf::RectangleShape(Vector2f(sdu::rin(30)+5, sdu::rin(30)+5));
-        shape->setPosition(sdu::rin(75), sdu::rin(75));
         shape->setFillColor(Color(230, 180, 180));
         addShape(shape);
+    }
+    
+    for (auto shape : organism->getShapes()) {
+        setPosition(shape->getPosition() +
+            Vector2f(sdu::rin(shape->getLocalBounds().width),
+                     sdu::rin(shape->getLocalBounds().height)));
+        if (sdu::rin(1) > 0.85)
+            break;
     }
 
 }
@@ -37,7 +43,7 @@ ShapeEntity* Thruster::clone() const
     for (auto shape : getShapes()) {
         auto cloneShape = new CircleShape(shape->getLocalBounds().width / 2);
         cloneShape->setPosition(shape->getPosition());
-        cloneShape->setFillColor(Color(230, 180, 180));
+        cloneShape->setFillColor(shape->getFillColor());
         clone->addShape(cloneShape);
     }
     

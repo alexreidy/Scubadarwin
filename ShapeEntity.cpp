@@ -60,7 +60,7 @@ void ShapeEntity::move(const Vector2f& offset)
     }
 }
 
-void ShapeEntity::setColor(const Color &color)
+void ShapeEntity::setColor(const Color& color)
 {
     for (auto shape : getShapes()) {
         shape->setFillColor(color);

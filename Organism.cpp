@@ -10,7 +10,8 @@
 
 #include "Bone.hpp"
 #include "Thruster.hpp"
-const int N_ORGAN_TYPES = 2;
+#include "Chloroplast.hpp"
+const int N_ORGAN_TYPES = 3;
 
 // Consider using OrganGenerator(Factory) classes, particularly if they're faster
 
@@ -26,7 +27,8 @@ OrganGeneratorFunction getOrganGenerator()
 
 OrganGeneratorFunction organGenerators[N_ORGAN_TYPES] = {
     getOrganGenerator<Bone>(),
-    getOrganGenerator<Thruster>()
+    getOrganGenerator<Thruster>(),
+    getOrganGenerator<Chloroplast>()
 };
 
 Organ* makeRandomOrganForOrganism(Organism* organism)
@@ -65,13 +67,15 @@ bool Organism::isAlive() const
 void Organism::die()
 {
     hp = 0;
+    // delete this;
 }
 
 Organism* Organism::reproduce()
 {
     // TODO add chance of mutation arg?
-    auto child = (Organism*) clone();
+    auto child = static_cast<Organism*>(clone());
     //mutate
+    
     return child;
 }
 
@@ -90,7 +94,7 @@ ShapeEntity* Organism::clone() const
     auto clone = new Organism;
     
     for (auto entity : getPhysicsEntities()) {
-        clone->addPhysicsEntity((PhysicsEntity*) entity->clone());
+        clone->addPhysicsEntity(static_cast<PhysicsEntity*>(entity->clone()));
     }
     
     return clone;

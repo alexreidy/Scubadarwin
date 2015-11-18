@@ -35,11 +35,10 @@ void init()
     atmosphere->Entity::setPosition(Vector2f(0,0));
     atmosphere->setColor(Color::Cyan);
     
-    auto organism = Organism::randomlyGenerateOrganism(4);
-    entities.insert(organism);
+    Organism* parent = Organism::randomlyGenerateOrganism(5);
 
     for (int i = 0; i < 100; i++) {
-        auto kid = organism->reproduce();
+        auto kid = parent->reproduce();
         kid->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
         entities.insert(kid);
     }
@@ -48,9 +47,7 @@ void init()
 
 Clock deltaTimeClock;
 
-//void draw(const ShapeEntity* shapeEntity);
-
-void affectEntityWhenZonesTouch(PhysicsEntity* entity)
+void applyZoneEffectsWhenZonesTouch(PhysicsEntity* entity)
 {
     if (entity->touching(atmosphere)) atmosphere->affect(entity);
     if (entity->touching(ocean)) ocean->affect(entity);
@@ -62,33 +59,24 @@ void update()
     
     auto mpos = (Vector2f) Mouse::getPosition(window);
     
-    Vector2f viewOffset;
-    
     auto mouseVector = mpos - SCREEN_CENTER;
     if (sdu::magnitude(mouseVector) < 100) mouseVector = Vector2f();
     
     for (auto entity : entities) {
-        //auto norm = sdu::norm(mpos - entity->getPosition());
-        //entity->applyForce(norm * 50000.0f);
         
-        affectEntityWhenZonesTouch(entity);
+        applyZoneEffectsWhenZonesTouch(entity);
         
         if (Mouse::isButtonPressed(Mouse::Button::Right))
             entity->applyForce((mpos - entity->getPosition())*5000.0f);
         
         if (entity->getPosition().y > HEIGHT * 2) entity->move(Vector2f(0, -HEIGHT*2));
         
-        //auto v = sdu::magnitude(entity->getVelocity());
-        
-        
         for (auto other : entities) {
             if (other == entity) continue;
             if (entity->touching(other)) {
-                entity->setColor(sf::Color::Yellow);
+                //entity->setColor(sf::Color::Yellow);
             }
         }
-        
-        //ocean->setPosition(mpos);
         
         entity->update(dt);
         
@@ -115,9 +103,7 @@ void render()
     draw(ocean);
     draw(atmosphere);
     
-    for (auto entity : entities) {
-        draw(entity);
-    }
+    for (auto entity : entities) draw(entity);
     
     window.display();
 }

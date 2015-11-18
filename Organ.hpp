@@ -12,6 +12,10 @@
 #include "PhysicsEntity.hpp"
 #include "Organism.hpp"
 
+using sf::CircleShape;
+using sf::RectangleShape;
+using sf::Color;
+
 class ImpulseReceiver{};
 
 class Organism;

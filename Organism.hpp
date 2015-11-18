@@ -28,11 +28,11 @@ public:
     
     Organism* reproduce();
     
+    virtual ShapeEntity* clone() const override;
+    
     void update(float dt) override;
     
     void changeNutrients(float delta);
-    
-    virtual ShapeEntity* clone() const override;
     
 private:
     float hp = 0;
