@@ -17,11 +17,11 @@ public:
     
     virtual ~PlanetaryFluidZone();
     
-    virtual void affect(PhysicsEntity* entity) override;
+    virtual void affect(SimEntity* entity) override;
     
-    void setDensity(float density);
+    void setDensity(float density) override;
     
-    float getDensity() const;
+    float getDensity() const override;
     
 protected:    
     virtual Vector2f calcDragActingOn(const PhysicsEntity* entity) const;

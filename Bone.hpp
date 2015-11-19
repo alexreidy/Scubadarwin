@@ -23,7 +23,7 @@ public:
     
     virtual void update(float dt) override;
     
-    virtual ShapeEntity* clone() const override;
+    virtual ShapeEntity* makeNewInstance() const override;
 };
 
 #endif /* Bone_hpp */

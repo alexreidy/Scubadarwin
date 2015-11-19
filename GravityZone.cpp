@@ -20,7 +20,7 @@ Vector2f GravityZone::getGravityAcceleration() const
     return g;
 }
 
-void GravityZone::affect(PhysicsEntity* entity)
+void GravityZone::affect(SimEntity* entity)
 {
     entity->applyForce(entity->getMass() * g);
 }

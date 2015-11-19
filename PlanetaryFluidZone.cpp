@@ -43,7 +43,7 @@ Vector2f PlanetaryFluidZone::calcDragActingOn(const PhysicsEntity* entity) const
     );
 }
 
-void PlanetaryFluidZone::affect(PhysicsEntity* entity)
+void PlanetaryFluidZone::affect(SimEntity* entity)
 {
     GravityZone::affect(entity);
     Vector2f buoyancy = (entity->getVolume() * density) * getGravityAcceleration();

@@ -17,8 +17,7 @@ public:
     
     virtual ~Atmosphere();
     
-    virtual ShapeEntity* clone() const override;
-
+    virtual ShapeEntity* makeNewInstance() const override;
     
 };
 

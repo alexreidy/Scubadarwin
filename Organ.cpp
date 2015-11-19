@@ -15,7 +15,22 @@ Organ::Organ(Organism* organism)
 
 Organ::~Organ() {}
 
-void Organ::update(float tpf)
+void Organ::update(float dt)
 {
-    PhysicsEntity::update(tpf);
+    SimEntity::update(dt);
 }
+
+void Organ::initializePosition()
+{
+    if (organism == nullptr) return;
+    
+    for (auto shape : organism->getShapes()) {
+        setPosition(shape->getPosition() +
+            Vector2f(sdu::rin(shape->getLocalBounds().width),
+                     sdu::rin(shape->getLocalBounds().height)));
+        
+        if (sdu::rin(1) > 0.85) break;
+    }
+}
+
+void Organ::affect(SimEntity* entity) {}

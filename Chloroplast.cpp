@@ -19,13 +19,7 @@ Chloroplast::Chloroplast(Organism* parent, bool randomlyGenerated) : Organ(paren
         addShape(shape);
     }
     
-    for (auto shape : organism->getShapes()) {
-        setPosition(shape->getPosition() +
-            Vector2f(sdu::rin(shape->getLocalBounds().width),
-                     sdu::rin(shape->getLocalBounds().height)));
-        if (sdu::rin(1) > 0.85)
-            break;
-    }
+    initializePosition();
 }
 
 Chloroplast::~Chloroplast() {}
@@ -35,16 +29,7 @@ void Chloroplast::update(float dt)
     Organ::update(dt);
 }
 
-ShapeEntity* Chloroplast::clone() const
+ShapeEntity* Chloroplast::makeNewInstance() const
 {
-    auto clone = new Chloroplast;
-    
-    for (auto shape : getShapes()) {
-        auto cloneShape = new RectangleShape(Vector2f(shape->getLocalBounds().width, shape->getLocalBounds().height));
-        cloneShape->setPosition(shape->getPosition());
-        cloneShape->setFillColor(shape->getFillColor());
-        clone->addShape(cloneShape);
-    }
-    
-    return clone;
+    return new Chloroplast;
 }

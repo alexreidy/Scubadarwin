@@ -21,8 +21,8 @@ public:
     virtual ~Chloroplast();
     
     virtual void update(float dt) override;
-    
-    virtual ShapeEntity* clone() const override;
+        
+    virtual ShapeEntity* makeNewInstance() const override;
     
 };
 

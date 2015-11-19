@@ -15,7 +15,7 @@ Atmosphere::Atmosphere()
     setDensity(0.2);
 }
 
-ShapeEntity* Atmosphere::clone() const
+ShapeEntity* Atmosphere::makeNewInstance() const
 {
     return new Atmosphere;
 }

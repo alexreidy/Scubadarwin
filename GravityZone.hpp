@@ -15,7 +15,7 @@ class GravityZone : public Zone {
 public:
     virtual ~GravityZone();
     
-    virtual void affect(PhysicsEntity* entity);
+    virtual void affect(SimEntity* entity) override;
     
     void setGravityAcceleration(const Vector2f& g);
     

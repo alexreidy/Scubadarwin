@@ -7,3 +7,5 @@
 //
 
 #include "SimEntity.hpp"
+
+SimEntity::~SimEntity() {}

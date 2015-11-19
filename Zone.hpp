@@ -9,14 +9,12 @@
 #ifndef Zone_hpp
 #define Zone_hpp
 
-#include "PhysicsEntity.hpp"
+#include "SimEntity.hpp"
 
-class Zone : public ShapeEntity {
+class Zone : public SimEntity {
 public:
     virtual ~Zone();
-    
-    virtual void affect(PhysicsEntity* entity) = 0;
-        
+            
     virtual void update(float dt) override;
     
 };

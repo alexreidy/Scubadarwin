@@ -9,6 +9,16 @@
 #ifndef SimEntity_hpp
 #define SimEntity_hpp
 
-#include <stdio.h>
+#include "PhysicsEntity.hpp"
+
+class SimEntity : public PhysicsEntity {
+public:
+    virtual ~SimEntity();
+    
+    virtual void affect(SimEntity* entity) = 0;
+
+private:
+    
+};
 
 #endif /* SimEntity_hpp */

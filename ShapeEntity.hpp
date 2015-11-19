@@ -14,6 +14,7 @@
 #include "util.hpp"
 
 using sf::Shape;
+using sf::RectangleShape;
 using sf::Color;
 
 class ShapeEntity : public Entity {
@@ -36,10 +37,12 @@ public:
     
     void setColor(const Color& color);
     
-    virtual ShapeEntity* clone() const = 0;
+    virtual ShapeEntity* clone() const;
     
 protected:
     mutable std::vector<Shape*> shapes;
+    
+    virtual ShapeEntity* makeNewInstance() const = 0;
     
 };
 

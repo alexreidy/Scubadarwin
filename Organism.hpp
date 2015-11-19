@@ -9,12 +9,12 @@
 #ifndef Organism_hpp
 #define Organism_hpp
 
-#include "CompoundPhysicsEntity.hpp"
+#include "CompoundSimEntity.hpp"
 #include "Organ.hpp"
 
 class Organ;
 
-class Organism : public CompoundPhysicsEntity {
+class Organism : public CompoundSimEntity {
 public:
     Organism();
     
@@ -28,11 +28,17 @@ public:
     
     Organism* reproduce();
     
-    virtual ShapeEntity* clone() const override;
+    //virtual ShapeEntity* clone() const override;
     
     void update(float dt) override;
     
     void changeNutrients(float delta);
+    
+    virtual ShapeEntity* makeNewInstance() const override;
+    
+    virtual ShapeEntity* clone() const override;
+    
+    virtual void affect(SimEntity* entity) override;
     
 private:
     float hp = 0;

@@ -81,7 +81,7 @@ Organism* Organism::reproduce()
 
 void Organism::update(float dt)
 {
-    CompoundPhysicsEntity::update(dt);
+    CompoundSimEntity::update(dt);
 }
 
 void Organism::changeNutrients(float delta)
@@ -99,3 +99,10 @@ ShapeEntity* Organism::clone() const
     
     return clone;
 }
+
+ShapeEntity* Organism::makeNewInstance() const
+{
+    return new Organism;
+}
+
+void Organism::affect(SimEntity* entity) {}

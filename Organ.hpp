@@ -11,6 +11,7 @@
 
 #include "PhysicsEntity.hpp"
 #include "Organism.hpp"
+#include "SimEntity.hpp"
 
 using sf::CircleShape;
 using sf::RectangleShape;
@@ -20,15 +21,19 @@ class ImpulseReceiver{};
 
 class Organism;
 
-class Organ : public PhysicsEntity, ImpulseReceiver {
+class Organ : public SimEntity, ImpulseReceiver {
 public:
     Organ(Organism* organism = nullptr);
     virtual ~Organ();
     
-    virtual void update(float tpf) = 0;
+    virtual void update(float dt) override = 0;
+    
+    virtual void affect(SimEntity* entity) override;
     
 protected:
     Organism* organism;
+    
+    void initializePosition();
     
 };
 

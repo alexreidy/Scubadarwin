@@ -66,3 +66,22 @@ void ShapeEntity::setColor(const Color& color)
         shape->setFillColor(color);
     }
 }
+
+ShapeEntity* ShapeEntity::clone() const
+{
+    auto clone = makeNewInstance();
+    
+    for (auto shape : getShapes()) {
+        auto cloneShape = new RectangleShape(
+            Vector2f(
+                shape->getLocalBounds().width,
+                shape->getLocalBounds().height
+            )
+        );
+        cloneShape->setPosition(shape->getPosition());
+        cloneShape->setFillColor(shape->getFillColor());
+        clone->addShape(cloneShape);
+    }
+    
+    return clone;
+}

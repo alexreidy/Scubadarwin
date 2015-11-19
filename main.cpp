@@ -15,7 +15,7 @@ sf::RenderWindow window(sf::VideoMode(), "Scubadarwin", sf::Style::Fullscreen);
 const float WIDTH = window.getSize().x, HEIGHT = window.getSize().y;
 const auto SCREEN_CENTER = Vector2f(WIDTH/2, HEIGHT/2);
 
-std::set<PhysicsEntity*> entities;
+std::set<SimEntity*> entities;
 
 Ocean* ocean;
 Atmosphere* atmosphere;
@@ -32,13 +32,13 @@ void init()
     
     atmosphere = new Atmosphere;
     atmosphere->addShape(new RectangleShape(Vector2f(WIDTH*20, HEIGHT/2)));
-    atmosphere->Entity::setPosition(Vector2f(0,0));
+    atmosphere->setPosition(Vector2f(0,0));
     atmosphere->setColor(Color::Cyan);
     
     Organism* parent = Organism::randomlyGenerateOrganism(5);
 
     for (int i = 0; i < 100; i++) {
-        auto kid = parent->reproduce();
+        auto kid = Organism::randomlyGenerateOrganism(7);//parent->reproduce();
         kid->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
         entities.insert(kid);
     }
@@ -47,7 +47,7 @@ void init()
 
 Clock deltaTimeClock;
 
-void applyZoneEffectsWhenZonesTouch(PhysicsEntity* entity)
+void applyZoneEffectsWhenZonesTouch(SimEntity* entity)
 {
     if (entity->touching(atmosphere)) atmosphere->affect(entity);
     if (entity->touching(ocean)) ocean->affect(entity);

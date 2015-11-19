@@ -15,7 +15,7 @@ Ocean::Ocean()
     setDensity(3);
 }
 
-ShapeEntity* Ocean::clone() const
+ShapeEntity* Ocean::makeNewInstance() const
 {
     return new Ocean;
 }
