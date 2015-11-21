@@ -10,9 +10,11 @@
 
 CompoundSimEntity::~CompoundSimEntity()
 {
-    for (auto entity : getPhysicsEntities()) {
+    for (auto entity : getConstituentEntities())
         delete entity;
-    }
+    // ShapeEntity destructor calls virtual getShapes(), and
+    // the shapes are already deleted in this destructor, so
+    shapes.clear();
 }
 
 float CompoundSimEntity::getMass() const
@@ -20,7 +22,7 @@ float CompoundSimEntity::getMass() const
     if (mass >= 0) return mass;
     
     float m = 0;
-    for (auto entity : getPhysicsEntities()) {
+    for (auto entity : getConstituentEntities()) {
         m += entity->getMass();
     }
     
@@ -36,7 +38,7 @@ void CompoundSimEntity::setDensity(float density) {}
 
 bool CompoundSimEntity::touching(const ShapeEntity* entity) const
 {
-    for (auto c : getPhysicsEntities()) if (c->touching(entity)) return true;
+    for (auto c : getConstituentEntities()) if (c->touching(entity)) return true;
     return false;
 }
 
@@ -44,7 +46,7 @@ void CompoundSimEntity::setPosition(const Vector2f& position)
 {
     Vector2f offset = position - getPosition();
     Entity::setPosition(position);
-    for (auto entity : getPhysicsEntities()) {
+    for (auto entity : getConstituentEntities()) {
         entity->move(offset);
     }
 }
@@ -52,7 +54,7 @@ void CompoundSimEntity::setPosition(const Vector2f& position)
 void CompoundSimEntity::move(const Vector2f& offset)
 {
     Entity::move(offset);
-    for (auto entity : getPhysicsEntities()) {
+    for (auto entity : getConstituentEntities()) {
         entity->move(offset);
     }
 }
@@ -64,7 +66,7 @@ const std::vector<Shape*>& CompoundSimEntity::getShapes() const
     shapes = std::vector<Shape*>(getShapeCount());
     
     int i = 0;
-    for (auto entity : getPhysicsEntities()) {
+    for (auto entity : getConstituentEntities()) {
         for (auto shape : entity->getShapes()) {
             shapes[i] = shape;
             i++;
@@ -72,17 +74,23 @@ const std::vector<Shape*>& CompoundSimEntity::getShapes() const
     }
     
     this->shapes = shapes;
+    
     return shapes;
 }
 
-void CompoundSimEntity::addPhysicsEntity(PhysicsEntity* entity)
+const std::vector<SimEntity*>& CompoundSimEntity::getConstituentEntities() const
+{
+    return constituents;
+}
+
+void CompoundSimEntity::addEntity(SimEntity* entity)
 {
     constituents.push_back(entity);
     shapeCount += entity->getShapeCount();
     shapesCached = false;
 }
 
-void CompoundSimEntity::removePhysicsEntity(PhysicsEntity* entity)
+void CompoundSimEntity::removeEntity(SimEntity* entity)
 {
     for (int i = 0; i < constituents.size(); i++) {
         if (constituents.at(i) == entity) {
@@ -91,11 +99,6 @@ void CompoundSimEntity::removePhysicsEntity(PhysicsEntity* entity)
     }
     shapeCount -= entity->getShapeCount();
     shapesCached = false;
-}
-
-const std::vector<PhysicsEntity*>& CompoundSimEntity::getPhysicsEntities() const
-{
-    return constituents;
 }
 
 int CompoundSimEntity::getShapeCount() const

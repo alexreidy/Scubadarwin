@@ -48,7 +48,12 @@ Organism* Organism::randomlyGenerateOrganism(int organCount)
     
     for (int i = 0; i < organCount; i++) {
         Organ* organ = makeRandomOrganForOrganism(organism);
-        organism->addPhysicsEntity(organ);
+        organism->addEntity(organ);
+        for (auto shp : organism->getShapes()) {
+            if (shp == nullptr) {
+                std::cout<<"nullalready!!!";
+            }
+        }
     }
     
     return organism;
@@ -70,6 +75,11 @@ void Organism::die()
     // delete this;
 }
 
+void Organism::changeHp(float change)
+{
+    hp += change;
+}
+
 Organism* Organism::reproduce()
 {
     // TODO add chance of mutation arg?
@@ -82,6 +92,7 @@ Organism* Organism::reproduce()
 void Organism::update(float dt)
 {
     CompoundSimEntity::update(dt);
+    changeHp(-0.00001*getMass());
 }
 
 void Organism::changeNutrients(float delta)
@@ -93,8 +104,8 @@ ShapeEntity* Organism::clone() const
 {
     auto clone = new Organism;
     
-    for (auto entity : getPhysicsEntities()) {
-        clone->addPhysicsEntity(static_cast<PhysicsEntity*>(entity->clone()));
+    for (auto entity : getConstituentEntities()) {
+        clone->addEntity(static_cast<SimEntity*>(entity->clone()));
     }
     
     return clone;
@@ -105,4 +116,9 @@ ShapeEntity* Organism::makeNewInstance() const
     return new Organism;
 }
 
-void Organism::affect(SimEntity* entity) {}
+void Organism::affect(SimEntity* entity) { entity->applyForce(sf::Vector2f(400000, 400000)); }
+
+bool Organism::canBeDeleted() const
+{
+    return !isAlive();
+}

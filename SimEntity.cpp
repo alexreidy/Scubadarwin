@@ -9,3 +9,8 @@
 #include "SimEntity.hpp"
 
 SimEntity::~SimEntity() {}
+
+bool SimEntity::canBeDeleted() const
+{
+    return false;
+}

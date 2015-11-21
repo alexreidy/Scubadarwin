@@ -16,8 +16,8 @@ public:
     virtual ~SimEntity();
     
     virtual void affect(SimEntity* entity) = 0;
-
-private:
+    
+    virtual bool canBeDeleted() const;
     
 };
 

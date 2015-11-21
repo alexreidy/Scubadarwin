@@ -26,6 +26,8 @@ public:
     
     void die();
     
+    void changeHp(float change);
+    
     Organism* reproduce();
     
     //virtual ShapeEntity* clone() const override;
@@ -40,8 +42,10 @@ public:
     
     virtual void affect(SimEntity* entity) override;
     
+    virtual bool canBeDeleted() const override;
+    
 private:
-    float hp = 0;
+    float hp = 100;
     
     float nutrients = 0;
     

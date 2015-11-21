@@ -14,6 +14,7 @@
 #include <iostream>
 #include <random>
 #include <cmath>
+#include <list>
 #include <set>
 
 namespace sdu {

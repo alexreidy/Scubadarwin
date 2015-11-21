@@ -15,11 +15,13 @@ class CompoundSimEntity : public SimEntity {
 public:
     virtual ~CompoundSimEntity();
     
-    virtual float getDensity() const override;
+    virtual const std::vector<Shape*>& getShapes() const override;
     
-    virtual void setDensity(float density) override;
+    const std::vector<SimEntity*>& getConstituentEntities() const;
     
-    virtual float getMass() const override;
+    virtual int getShapeCount() const override;
+    
+    virtual void addShape(Shape* shape) override;
     
     virtual bool touching(const ShapeEntity* entity) const override;
     
@@ -27,20 +29,20 @@ public:
     
     virtual void move(const Vector2f& offset) override;
     
-    void addPhysicsEntity(PhysicsEntity* entity);
+    virtual float getDensity() const override;
     
-    void removePhysicsEntity(PhysicsEntity* entity);
+    virtual void setDensity(float density) override;
     
-    const std::vector<PhysicsEntity*>& getPhysicsEntities() const;
+    virtual float getMass() const override;
+        
+    void addEntity(SimEntity* entity);
     
-    virtual const std::vector<Shape*>& getShapes() const override;
+    void removeEntity(SimEntity* entity);
     
-    virtual int getShapeCount() const override;
-    
-    virtual void addShape(Shape* shape) override;
+protected:
+    std::vector<SimEntity*> constituents;
     
 private:
-    std::vector<PhysicsEntity*> constituents;
     
     bool shapesCached = false;
     

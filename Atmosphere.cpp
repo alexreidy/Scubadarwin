@@ -12,6 +12,7 @@ Atmosphere::~Atmosphere() {}
 
 Atmosphere::Atmosphere()
 {
+    //constituents.push_back(this);
     setDensity(0.2);
 }
 

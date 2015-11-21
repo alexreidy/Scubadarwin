@@ -3,8 +3,10 @@
 
 #include "Ocean.hpp"
 #include "Atmosphere.hpp"
+#include "Environment.hpp"
+
 #include "Organism.hpp"
-#include "Bone.hpp"
+#include "Thruster.hpp"
 
 using sf::Clock;
 using sf::Mouse;
@@ -15,10 +17,12 @@ sf::RenderWindow window(sf::VideoMode(), "Scubadarwin", sf::Style::Fullscreen);
 const float WIDTH = window.getSize().x, HEIGHT = window.getSize().y;
 const auto SCREEN_CENTER = Vector2f(WIDTH/2, HEIGHT/2);
 
-std::set<SimEntity*> entities;
+std::list<CompoundSimEntity*> entities;
 
 Ocean* ocean;
 Atmosphere* atmosphere;
+
+Environment* environment;
 
 void init()
 {
@@ -35,23 +39,22 @@ void init()
     atmosphere->setPosition(Vector2f(0,0));
     atmosphere->setColor(Color::Cyan);
     
-    Organism* parent = Organism::randomlyGenerateOrganism(5);
-
-    for (int i = 0; i < 100; i++) {
-        auto kid = Organism::randomlyGenerateOrganism(7);//parent->reproduce();
-        kid->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
-        entities.insert(kid);
-    }
+    environment = new Environment;
+    environment->addEntity(ocean);
+    environment->addEntity(atmosphere);
     
+    entities.push_back(environment);
+    
+    for (int i = 0; i < 100; i++) {
+        auto kid = Organism::randomlyGenerateOrganism(7);
+        kid->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
+        entities.push_back(kid);
+    }
 }
 
 Clock deltaTimeClock;
 
-void applyZoneEffectsWhenZonesTouch(SimEntity* entity)
-{
-    if (entity->touching(atmosphere)) atmosphere->affect(entity);
-    if (entity->touching(ocean)) ocean->affect(entity);
-}
+std::list<CompoundSimEntity*> entitiesToDelete;
 
 void update()
 {
@@ -63,29 +66,47 @@ void update()
     if (sdu::magnitude(mouseVector) < 100) mouseVector = Vector2f();
     
     for (auto entity : entities) {
-        
-        applyZoneEffectsWhenZonesTouch(entity);
-        
+            
         if (Mouse::isButtonPressed(Mouse::Button::Right))
             entity->applyForce((mpos - entity->getPosition())*5000.0f);
         
-        if (entity->getPosition().y > HEIGHT * 2) entity->move(Vector2f(0, -HEIGHT*2));
-        
         for (auto other : entities) {
-            if (other == entity) continue;
-            if (entity->touching(other)) {
-                //entity->setColor(sf::Color::Yellow);
+            if (other == entity)
+                continue;
+            
+            for (auto constituent : entity->getConstituentEntities()) {
+                bool touching = false;
+                for (auto otherConstituent : other->getConstituentEntities()) {
+                    if (constituent->touching(otherConstituent)) {
+                        constituent->affect(otherConstituent);
+                        touching = true;
+                    }
+                }
+                
+                //if (touching) constituent->affect(other); // can we avoid this thanks to physics?
             }
+
         }
         
         entity->update(dt);
         
         entity->move(-mouseVector*dt);
         
+        if (entity->canBeDeleted())
+            entitiesToDelete.push_back(entity);
+        
     }
     
-    ocean->move(-mouseVector*dt);
-    atmosphere->move(-mouseVector*dt);
+    for (auto entity : entitiesToDelete) {
+        entities.remove(entity);
+        delete entity;
+        
+        auto o = Organism::randomlyGenerateOrganism(7);
+        o->setPosition(Vector2f(sdu::rin(WIDTH), sdu::rin(HEIGHT)));
+        entities.push_back(o);
+    }
+    
+    entitiesToDelete.clear();
 
 }
 
@@ -99,9 +120,6 @@ void draw(const ShapeEntity* shapeEntity)
 void render()
 {
     window.clear();
-    
-    draw(ocean);
-    draw(atmosphere);
     
     for (auto entity : entities) draw(entity);
     

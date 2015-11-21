@@ -37,3 +37,8 @@ ShapeEntity* Bone::makeNewInstance() const
 {
     return new Bone;
 }
+
+void Bone::affect(SimEntity* entity)
+{
+    
+}

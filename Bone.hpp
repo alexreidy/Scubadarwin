@@ -19,11 +19,14 @@ class Bone : public Organ {
 public:
     Bone(Organism* organism = nullptr, bool randomlyGenerated = false);
     
+    virtual ShapeEntity* makeNewInstance() const override;
+    
     virtual ~Bone();
     
     virtual void update(float dt) override;
     
-    virtual ShapeEntity* makeNewInstance() const override;
+    virtual void affect(SimEntity* entity) override;
+
 };
 
 #endif /* Bone_hpp */

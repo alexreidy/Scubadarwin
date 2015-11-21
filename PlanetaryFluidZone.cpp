@@ -15,16 +15,6 @@ PlanetaryFluidZone::PlanetaryFluidZone()
     setGravityAcceleration(Vector2f(0, 280));
 }
 
-void PlanetaryFluidZone::setDensity(float density)
-{
-    this->density = density;
-}
-
-float PlanetaryFluidZone::getDensity() const
-{
-    return density;
-}
-
 inline float drag(float fluidDensity, float objVelocity, float objArea)
 {
     const auto drag = 0.5 * fluidDensity * pow(objVelocity, 2) * objArea * 0.02;
@@ -46,6 +36,6 @@ Vector2f PlanetaryFluidZone::calcDragActingOn(const PhysicsEntity* entity) const
 void PlanetaryFluidZone::affect(SimEntity* entity)
 {
     GravityZone::affect(entity);
-    Vector2f buoyancy = (entity->getVolume() * density) * getGravityAcceleration();
+    Vector2f buoyancy = (entity->getVolume() * getDensity()) * getGravityAcceleration();
     entity->applyForce(calcDragActingOn(entity) - buoyancy);
 }
