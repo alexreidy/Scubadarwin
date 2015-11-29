@@ -26,9 +26,11 @@ public:
     Organ(Organism* organism = nullptr);
     virtual ~Organ();
     
-    virtual void update(float dt) override = 0;
+    virtual void update(float dt) override;
     
     virtual void affect(SimEntity* entity) override;
+    
+    virtual const Vector2f& getVelocity() const override;
     
 protected:
     Organism* organism;

@@ -49,11 +49,6 @@ Organism* Organism::randomlyGenerateOrganism(int organCount)
     for (int i = 0; i < organCount; i++) {
         Organ* organ = makeRandomOrganForOrganism(organism);
         organism->addEntity(organ);
-        for (auto shp : organism->getShapes()) {
-            if (shp == nullptr) {
-                std::cout<<"nullalready!!!";
-            }
-        }
     }
     
     return organism;

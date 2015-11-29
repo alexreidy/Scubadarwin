@@ -17,7 +17,10 @@ Organ::~Organ() {}
 
 void Organ::update(float dt)
 {
-    SimEntity::update(dt);
+    if (organism == nullptr) return;
+    
+    organism->applyForce(this->getForce());
+    setForce(Vector2f());
 }
 
 void Organ::initializePosition()
@@ -34,3 +37,8 @@ void Organ::initializePosition()
 }
 
 void Organ::affect(SimEntity* entity) {}
+
+const Vector2f& Organ::getVelocity() const
+{
+    return organism->getVelocity();
+}

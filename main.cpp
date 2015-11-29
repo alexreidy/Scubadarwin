@@ -45,7 +45,7 @@ void init()
     
     entities.push_back(environment);
     
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 50; i++) {
         auto kid = Organism::randomlyGenerateOrganism(7);
         kid->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
         entities.push_back(kid);
@@ -66,27 +66,24 @@ void update()
     if (sdu::magnitude(mouseVector) < 100) mouseVector = Vector2f();
     
     for (auto entity : entities) {
-            
-        if (Mouse::isButtonPressed(Mouse::Button::Right))
-            entity->applyForce((mpos - entity->getPosition())*5000.0f);
-        
-        for (auto other : entities) {
-            if (other == entity)
-                continue;
-            
-            for (auto constituent : entity->getConstituentEntities()) {
-                bool touching = false;
-                for (auto otherConstituent : other->getConstituentEntities()) {
+        for (auto constituent : entity->getConstituentEntities()) {
+            for (auto e : entities) {
+                if (e == entity) continue;
+                
+                for (auto otherConstituent : e->getConstituentEntities()) {
                     if (constituent->touching(otherConstituent)) {
                         constituent->affect(otherConstituent);
-                        touching = true;
                     }
                 }
-                
-                //if (touching) constituent->affect(other); // can we avoid this thanks to physics?
             }
-
+            
+            constituent->update(dt);
         }
+    }
+    
+    for (auto entity : entities) {
+        if (Mouse::isButtonPressed(Mouse::Button::Right))
+            entity->applyForce((mpos - entity->getPosition())*5000.0f);
         
         entity->update(dt);
         
@@ -94,7 +91,6 @@ void update()
         
         if (entity->canBeDeleted())
             entitiesToDelete.push_back(entity);
-        
     }
     
     for (auto entity : entitiesToDelete) {

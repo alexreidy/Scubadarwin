@@ -42,6 +42,11 @@ void PhysicsEntity::applyForce(const Vector2f& force)
     this->force += force;
 }
 
+const Vector2f& PhysicsEntity::getForce() const
+{
+    return force;
+}
+
 void PhysicsEntity::setForce(const Vector2f &force)
 {
     this->force = force;
@@ -52,7 +57,7 @@ void PhysicsEntity::setVelocity(const Vector2f& velocity)
     this->velocity = velocity;
 }
 
-Vector2f PhysicsEntity::getVelocity() const
+const Vector2f& PhysicsEntity::getVelocity() const
 {
     return velocity;
 }

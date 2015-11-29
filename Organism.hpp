@@ -30,8 +30,6 @@ public:
     
     Organism* reproduce();
     
-    //virtual ShapeEntity* clone() const override;
-    
     void update(float dt) override;
     
     void changeNutrients(float delta);

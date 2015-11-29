@@ -25,11 +25,13 @@ public:
     
     void applyForce(const Vector2f& force);
     
+    const Vector2f& getForce() const;
+    
     void setForce(const Vector2f& force);
     
     void setVelocity(const Vector2f& velocity);
     
-    Vector2f getVelocity() const;
+    virtual const Vector2f& getVelocity() const;
     
     virtual void updatePhysics(float dt);
     
