@@ -19,6 +19,11 @@ public:
     
     virtual bool canBeDeleted() const;
     
+    //virtual std::vector<SimEntity*> getProducts();
+    
+protected:
+    //std::vector<SimEntity*> products;
+    
 };
 
 #endif /* SimEntity_hpp */

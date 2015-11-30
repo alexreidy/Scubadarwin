@@ -32,6 +32,8 @@ public:
     
     virtual const Vector2f& getVelocity() const override;
     
+    void setParentOrganism(Organism* organism);
+    
 protected:
     Organism* organism;
     

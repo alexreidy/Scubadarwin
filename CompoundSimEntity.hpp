@@ -17,7 +17,7 @@ public:
     
     virtual const std::vector<Shape*>& getShapes() const override;
     
-    const std::vector<SimEntity*>& getConstituentEntities() const;
+    const std::list<SimEntity*>& getConstituentEntities() const;
     
     virtual int getShapeCount() const override;
     
@@ -39,8 +39,12 @@ public:
     
     void removeEntity(SimEntity* entity);
     
+    virtual std::vector<CompoundSimEntity*> getProducts();
+    
 protected:
-    std::vector<SimEntity*> constituents;
+    std::list<SimEntity*> constituents;
+    
+    std::vector<CompoundSimEntity*> products;
     
 private:
     

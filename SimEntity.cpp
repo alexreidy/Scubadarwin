@@ -14,3 +14,11 @@ bool SimEntity::canBeDeleted() const
 {
     return false;
 }
+
+/*
+std::vector<SimEntity*> SimEntity::getProducts()
+{
+    auto ret = products;
+    products.clear();
+    return ret;
+}*/

@@ -42,3 +42,8 @@ const Vector2f& Organ::getVelocity() const
 {
     return organism->getVelocity();
 }
+
+void Organ::setParentOrganism(Organism* organism)
+{
+    this->organism = organism;
+}

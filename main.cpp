@@ -45,7 +45,7 @@ void init()
     
     entities.push_back(environment);
     
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 1; i++) {
         auto kid = Organism::randomlyGenerateOrganism(7);
         kid->setPosition(Vector2f(sdu::rin(2000), sdu::rin(2000)));
         entities.push_back(kid);
@@ -91,15 +91,16 @@ void update()
         
         if (entity->canBeDeleted())
             entitiesToDelete.push_back(entity);
+        
+        for (auto p : entity->getProducts()) {
+            entities.push_back(p);
+        }
     }
     
     for (auto entity : entitiesToDelete) {
         entities.remove(entity);
+        std::cout << "d ";
         delete entity;
-        
-        auto o = Organism::randomlyGenerateOrganism(7);
-        o->setPosition(Vector2f(sdu::rin(WIDTH), sdu::rin(HEIGHT)));
-        entities.push_back(o);
     }
     
     entitiesToDelete.clear();

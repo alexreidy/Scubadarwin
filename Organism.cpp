@@ -77,9 +77,25 @@ void Organism::changeHp(float change)
 
 Organism* Organism::reproduce()
 {
-    // TODO add chance of mutation arg?
+    // TODO add "propensity to mutate" arg?
     auto child = static_cast<Organism*>(clone());
-    //mutate
+    
+    std::list<SimEntity*> organsToRemove;
+    
+    // not sure exactly what's going on during iteration; will concurrent modification be an issue?
+    for (auto organ : child->getConstituentEntities()) {
+        if (sdu::rin(1) > 0.93) {
+            organsToRemove.push_back(organ);
+        }
+        if (sdu::rin(1) > 0.95) {
+            child->addEntity(makeRandomOrganForOrganism(child));
+        }
+        // maybe have ShapeEntity->mutate(...)?
+    }
+    
+    for (auto organ : organsToRemove) {
+        child->removeEntity(organ);
+    }
     
     return child;
 }
@@ -87,7 +103,10 @@ Organism* Organism::reproduce()
 void Organism::update(float dt)
 {
     CompoundSimEntity::update(dt);
-    changeHp(-0.00001*getMass());
+    changeHp(-0.0001*getMass());
+    if (hp <= 0) {
+        products.push_back(this->reproduce());
+    }
 }
 
 void Organism::changeNutrients(float delta)
@@ -98,9 +117,12 @@ void Organism::changeNutrients(float delta)
 ShapeEntity* Organism::clone() const
 {
     auto clone = new Organism;
+    clone->setPosition(this->getPosition());
     
     for (auto entity : getConstituentEntities()) {
-        clone->addEntity(static_cast<SimEntity*>(entity->clone()));
+        auto organ = static_cast<Organ*>(entity->clone());
+        organ->setParentOrganism(clone);
+        clone->addEntity(organ);
     }
     
     return clone;
