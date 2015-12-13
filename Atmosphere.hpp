@@ -19,6 +19,8 @@ public:
     
     virtual ShapeEntity* makeNewInstance() const override;
     
+    virtual void affect(SimEntity* entity) override;
+    
 };
 
 #endif /* Atmosphere_hpp */

@@ -8,6 +8,11 @@
 
 #include "CompoundSimEntity.hpp"
 
+CompoundSimEntity::CompoundSimEntity()
+{
+
+}
+
 CompoundSimEntity::~CompoundSimEntity()
 {
     for (auto entity : getConstituentEntities())
@@ -15,6 +20,18 @@ CompoundSimEntity::~CompoundSimEntity()
     // ShapeEntity destructor calls virtual getShapes(), and
     // the shapes are already deleted in this destructor, so
     shapes.clear();
+}
+
+const std::list<SimEntity*>& CompoundSimEntity::getConstituentEntities() const
+{
+    return constituents;
+}
+
+void CompoundSimEntity::affect(const std::list<SimEntity*>& entities)
+{
+    for (auto constituent : getConstituentEntities()) {
+        constituent->affect(entities);
+    }
 }
 
 float CompoundSimEntity::getMass() const
@@ -78,11 +95,6 @@ const std::vector<Shape*>& CompoundSimEntity::getShapes() const
     return shapes;
 }
 
-const std::list<SimEntity*>& CompoundSimEntity::getConstituentEntities() const
-{
-    return constituents;
-}
-
 void CompoundSimEntity::addEntity(SimEntity* entity)
 {
     constituents.push_back(entity);
@@ -92,15 +104,9 @@ void CompoundSimEntity::addEntity(SimEntity* entity)
 
 void CompoundSimEntity::removeEntity(SimEntity* entity)
 {
-    /*
-    for (int i = 0; i < constituents.size(); i++) {
-        if (constituents.at(i) == entity) {
-            constituents.erase(constituents.begin() + i);
-        }
-    }*/
     constituents.remove(entity);
     shapeCount -= entity->getShapeCount();
-    delete entity; // This should be in charge of deleting its constituents, right?
+    delete entity;
     shapesCached = false;
 }
 
@@ -110,10 +116,3 @@ int CompoundSimEntity::getShapeCount() const
 }
 
 void CompoundSimEntity::addShape(Shape* shape) {}
-
-std::vector<CompoundSimEntity*> CompoundSimEntity::getProducts()
-{
-    auto ret = products;
-    products.clear();
-    return ret;
-}

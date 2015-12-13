@@ -13,16 +13,41 @@
 
 class SimEntity : public PhysicsEntity {
 public:
+    SimEntity();
+    
     virtual ~SimEntity();
     
     virtual void affect(SimEntity* entity) = 0;
     
+    virtual void affect(const std::list<SimEntity*>& entities);
+    
     virtual bool canBeDeleted() const;
     
-    //virtual std::vector<SimEntity*> getProducts();
+    virtual std::vector<SimEntity*> getProducts();
     
-protected:
-    //std::vector<SimEntity*> products;
+    virtual const SimEntity* getID() const;
+    
+    virtual float getEnergy() const;
+    
+    virtual void setEnergy(float e);
+    
+    float getEnergyUsed();
+    
+    void setEnergyUsed(float e);
+    
+    float getLightEnergy() const;
+    
+    void setLightEnergy(float e);
+        
+protected:    
+    std::vector<SimEntity*> products;
+    
+private:
+    float energy = 0;
+    
+    float energyUsed = 0;
+    
+    float lightEnergy = 0;
     
 };
 

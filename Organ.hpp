@@ -34,6 +34,8 @@ public:
     
     void setParentOrganism(Organism* organism);
     
+    const SimEntity* getID() const override;
+    
 protected:
     Organism* organism;
     

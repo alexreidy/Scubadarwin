@@ -12,11 +12,15 @@ Atmosphere::~Atmosphere() {}
 
 Atmosphere::Atmosphere()
 {
-    //constituents.push_back(this);
     setDensity(0.2);
 }
 
 ShapeEntity* Atmosphere::makeNewInstance() const
 {
     return new Atmosphere;
+}
+
+void Atmosphere::affect(SimEntity *entity)
+{
+    PlanetaryFluidZone::affect(entity);
 }

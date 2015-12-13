@@ -11,7 +11,9 @@
 #include "Bone.hpp"
 #include "Thruster.hpp"
 #include "Chloroplast.hpp"
-const int N_ORGAN_TYPES = 3;
+#include "Mouth.hpp"
+
+const int N_ORGAN_TYPES = 4;
 
 // Consider using OrganGenerator(Factory) classes, particularly if they're faster
 
@@ -28,7 +30,8 @@ OrganGeneratorFunction getOrganGenerator()
 OrganGeneratorFunction organGenerators[N_ORGAN_TYPES] = {
     getOrganGenerator<Bone>(),
     getOrganGenerator<Thruster>(),
-    getOrganGenerator<Chloroplast>()
+    getOrganGenerator<Chloroplast>(),
+    getOrganGenerator<Mouth>()
 };
 
 Organ* makeRandomOrganForOrganism(Organism* organism)
@@ -51,6 +54,8 @@ Organism* Organism::randomlyGenerateOrganism(int organCount)
         organism->addEntity(organ);
     }
     
+    organism->setEnergy(organism->getMass());
+    
     return organism;
 }
 
@@ -61,18 +66,12 @@ Organism::~Organism()
 
 bool Organism::isAlive() const
 {
-    return hp > 0;
+    return getEnergy() > 0 && alive;
 }
 
 void Organism::die()
 {
-    hp = 0;
-    // delete this;
-}
-
-void Organism::changeHp(float change)
-{
-    hp += change;
+    alive = false;
 }
 
 Organism* Organism::reproduce()
@@ -80,9 +79,10 @@ Organism* Organism::reproduce()
     // TODO add "propensity to mutate" arg?
     auto child = static_cast<Organism*>(clone());
     
+    if (sdu::rin(1) > 0.8) return child;
+    
     std::list<SimEntity*> organsToRemove;
     
-    // not sure exactly what's going on during iteration; will concurrent modification be an issue?
     for (auto organ : child->getConstituentEntities()) {
         if (sdu::rin(1) > 0.93) {
             organsToRemove.push_back(organ);
@@ -93,31 +93,44 @@ Organism* Organism::reproduce()
         // maybe have ShapeEntity->mutate(...)?
     }
     
-    for (auto organ : organsToRemove) {
-        child->removeEntity(organ);
+    if (organsToRemove.size() != getConstituentEntities().size()) {
+        for (auto organ : organsToRemove) {
+            child->removeEntity(organ);
+        }
     }
+    
+    child->setEnergy(child->getMass());
+    
+    child->setPosition(getPosition() +
+        Vector2f( sdu::rsign(sdu::rin(100)), sdu::rsign(sdu::rin(100)) ));
     
     return child;
 }
 
 void Organism::update(float dt)
 {
-    CompoundSimEntity::update(dt);
-    changeHp(-0.0001*getMass());
-    if (hp <= 0) {
-        products.push_back(this->reproduce());
+    for (auto organ : getConstituentEntities()) {
+        organ->update(dt);
     }
-}
-
-void Organism::changeNutrients(float delta)
-{
-    nutrients += delta;
+    
+    PhysicsEntity::update(dt);
+    
+    float energyUsed = 0;
+    if (getEnergy() >= getMass() * 2) {
+        products.push_back(this->reproduce());
+        setEnergy(getEnergy() - getMass());
+        energyUsed += getMass();
+    }
+    
+    energyUsed += 0.02*dt*(1000000/getMass());
+    
+    setEnergy(getEnergy() - energyUsed);
 }
 
 ShapeEntity* Organism::clone() const
 {
     auto clone = new Organism;
-    clone->setPosition(this->getPosition());
+    //clone->setPosition(this->getPosition());
     
     for (auto entity : getConstituentEntities()) {
         auto organ = static_cast<Organ*>(entity->clone());
@@ -133,9 +146,12 @@ ShapeEntity* Organism::makeNewInstance() const
     return new Organism;
 }
 
-void Organism::affect(SimEntity* entity) { entity->applyForce(sf::Vector2f(400000, 400000)); }
+void Organism::affect(SimEntity* entity)
+{
+    
+}
 
 bool Organism::canBeDeleted() const
 {
-    return !isAlive();
+    return !isAlive() || getConstituentEntities().size() == 0;
 }

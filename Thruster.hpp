@@ -24,6 +24,8 @@ public:
         
     virtual ShapeEntity* makeNewInstance() const override;
     
+    Vector2f thrustVector;
+    
 };
 
 #endif /* Thruster_hpp */

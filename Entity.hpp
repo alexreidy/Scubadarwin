@@ -14,13 +14,6 @@
 
 using sf::Vector2f;
 
-// Might want to just define ShapeEntity here in the base class.
-// Shapes are pretty fundamental. Still maintain Vector2f position, and use it
-// as the canonical position that shapes are positioned relative to. Not sure how we're
-// going to handle relative shape positions. Consider the implications of side-scrolling.
-// If we do this, we can then implement PhysicsEntity "early," utilizing getShapes()
-// for volume calculations, etc.
-
 class Entity {
 public:
     virtual ~Entity();

@@ -26,13 +26,9 @@ public:
     
     void die();
     
-    void changeHp(float change);
-    
     Organism* reproduce();
     
     void update(float dt) override;
-    
-    void changeNutrients(float delta);
     
     virtual ShapeEntity* makeNewInstance() const override;
     
@@ -43,10 +39,8 @@ public:
     virtual bool canBeDeleted() const override;
     
 private:
-    float hp = 100;
-    
-    float nutrients = 0;
-    
+    bool alive = true;
+        
 };
 
 #endif /* Organism_hpp */

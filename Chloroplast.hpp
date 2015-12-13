@@ -11,7 +11,6 @@
 
 #include "Organ.hpp"
 
-using sf::CircleShape;
 using sf::Color;
 
 class Chloroplast : public Organ {
@@ -23,6 +22,8 @@ public:
     virtual void update(float dt) override;
         
     virtual ShapeEntity* makeNewInstance() const override;
+    
+    virtual void affect(SimEntity* entity) override;
     
 };
 

@@ -13,11 +13,15 @@
 
 class CompoundSimEntity : public SimEntity {
 public:
+    CompoundSimEntity();
+    
     virtual ~CompoundSimEntity();
     
     virtual const std::vector<Shape*>& getShapes() const override;
     
-    const std::list<SimEntity*>& getConstituentEntities() const;
+    virtual const std::list<SimEntity*>& getConstituentEntities() const;
+    
+    virtual void affect(const std::list<SimEntity*>& entities) override;
     
     virtual int getShapeCount() const override;
     
@@ -39,14 +43,8 @@ public:
     
     void removeEntity(SimEntity* entity);
     
-    virtual std::vector<CompoundSimEntity*> getProducts();
-    
-protected:
-    std::list<SimEntity*> constituents;
-    
-    std::vector<CompoundSimEntity*> products;
-    
 private:
+    std::list<SimEntity*> constituents;
     
     bool shapesCached = false;
     

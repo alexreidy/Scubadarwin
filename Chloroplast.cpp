@@ -8,9 +8,9 @@
 
 #include "Chloroplast.hpp"
 
-Chloroplast::Chloroplast(Organism* parent, bool randomlyGenerated) : Organ(parent)
+Chloroplast::Chloroplast(Organism* organism, bool randomlyGenerated) : Organ(organism)
 {
-    setDensity(3.5);
+    setDensity(3);
     if (!randomlyGenerated) return;
     
     for (int i = 0; i < 1; i++) {
@@ -32,4 +32,10 @@ void Chloroplast::update(float dt)
 ShapeEntity* Chloroplast::makeNewInstance() const
 {
     return new Chloroplast;
+}
+
+void Chloroplast::affect(SimEntity* entity)
+{
+    organism->setEnergy(organism->getEnergy() + entity->getLightEnergy());
+    entity->setLightEnergy(0);
 }

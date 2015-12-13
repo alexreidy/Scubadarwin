@@ -47,3 +47,8 @@ void Organ::setParentOrganism(Organism* organism)
 {
     this->organism = organism;
 }
+
+const SimEntity* Organ::getID() const
+{
+    return organism;
+}
